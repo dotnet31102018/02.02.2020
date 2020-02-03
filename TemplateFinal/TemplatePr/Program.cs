@@ -33,7 +33,6 @@ namespace TemplatePr
             Console.WriteLine("Run stored procedure: ");
             List<Employee> employees_stored = new QueryStoredSelect("SELECT_EMPLOYEES",
                                                         new Dictionary<string, object>() { { "id", 2 } }).Run<Employee>();
-
             employees_stored.ForEach(e => Console.WriteLine(e));
 
         }
