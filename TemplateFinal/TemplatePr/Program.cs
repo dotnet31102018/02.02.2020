@@ -14,50 +14,21 @@ namespace TemplatePr
     class Program
     {
 
-        // old-way
-        private static List<object> SelectAll(string tableName)
-        {
-            //Command and Data Reader
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = new SqlConnection(ConfigurationManager.ConnectionStrings["employeedb"].ConnectionString);
-            cmd.Connection.Open();
-            cmd.CommandType = CommandType.Text;
-            cmd.CommandText = $"SELECT * FROM {tableName}";
-
-            SqlDataReader reader = cmd.ExecuteReader(CommandBehavior.Default);
-
-            List<Object> list = new List<object>();
-            while (reader.Read() == true)
-            {
-                var e = new
-                {
-                    Id = reader["ID"],
-                    firaName = reader["FIRSTNAME"]
-                };
-                list.Add(e);
-            }
-
-            cmd.Connection.Close();
-
-            return list;
-        }
         static void Main(string[] args)
         {
-            //var result = SelectAll("Employees");
-            //result.ForEach(e => Console.WriteLine(e));
 
-            //List<Employee> employees = QueryExecutor.SelectAll<Employee>();
-            //employees.ForEach(e => Console.WriteLine(e));
-
+            Console.WriteLine("Select all employees: ");				
             List<Employee> employees = new QuerySelectAll().Run<Employee>();
             employees.ForEach(e => Console.WriteLine(e));
 
+            Console.WriteLine();
+            Console.WriteLine("Insert new employee: ");		
             Employee new_emp = new Employee() { fname = "Shimon", LastName = "Levi", Gender = "Male", Salary = 35000 };
-            //new QueryInsertItem().Run<Employee>(new_emp);
+            new QueryInsertItem().Run<Employee>(new_emp);
 
-			// CREATE PROCEDURE SELECT_EMPLOYEES @id int
-			// AS
-			// SELECT * FROM EMPLOYEES WHERE Id = @id
+  	    // CREATE PROCEDURE SELECT_EMPLOYEES @id int
+	    // AS
+	    // SELECT * FROM EMPLOYEES WHERE Id = @id
             Console.WriteLine();
             Console.WriteLine("Run stored procedure: ");
             List<Employee> employees_stored = new QueryStoredSelect("SELECT_EMPLOYEES",
